@@ -1,0 +1,13 @@
+.cards{
+    width:90%;
+    line-height: normal;
+}
+
+.cardHeader{
+    padding: 3% !important;
+}
+
+
+.cardHeader > .header {
+    font-size: .6em !important;
+ }
