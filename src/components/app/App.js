@@ -3,6 +3,7 @@ import './App.css';
 import 'semantic-ui-css/semantic.min.css'
 import Infocard from '../infocard/infocard';
 import Mainpage from '../mainpage/mainpage'
+import Newpage from '../mainpage/newpage'
 function App() {
 
 
@@ -30,6 +31,7 @@ function App() {
     //   </header>
     // </div>
     <Mainpage></Mainpage>
+    // <Newpage></Newpage>
   );
 }
 

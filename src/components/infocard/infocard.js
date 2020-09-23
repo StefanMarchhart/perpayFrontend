@@ -10,6 +10,7 @@ class Infocard extends React.Component {
             headerText:"Not Yet Loaded",
             bodyText:"Not Yet Loaded",
             isLoaded:props.isLoaded
+            
         }
 
         // var ht = "Something went wrong"
