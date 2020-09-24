@@ -5,6 +5,31 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+
+
+
+const styles = theme => ({
+    '@global': {
+      ul: {
+        margin: 0,
+        padding: 0,
+        listStyle: 'none',
+      },
+    },
+    cardHeader: {
+      backgroundColor:
+        theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
+    },
+    cardBody: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'baseline',
+    //   marginBottom: theme.spacing(3),
+    }
+  });
+
 
 // import '../infocard/infocard.css'
 class Infocard extends React.Component {
@@ -16,7 +41,6 @@ class Infocard extends React.Component {
             headerText:"Not Yet Loaded",
             bodyText:"Not Yet Loaded",
             isLoaded:props.isLoaded,
-            styles:props.styles
         }
 
         // var ht = "Something went wrong"
@@ -38,13 +62,13 @@ class Infocard extends React.Component {
     componentDidMount(){
         var ht = "Something went wrong"
         var bt = "Body not loaded yet"
-        if (this.state.cardType=='paid'){
+        if (this.state.cardType === 'paid'){
             ht = "Total Dollars Paid"
             bt = "$"+ this.state.data[0].toLocaleString()
-        }else if(this.state.cardType=='payments'){
+        }else if(this.state.cardType === 'payments'){
             ht = "Total # of Payments"
             bt = this.state.data[0].toLocaleString()
-        }else if(this.state.cardType=='breakdown'){
+        }else if(this.state.cardType === 'breakdown'){
             ht = "Payment Breakdown"
             bt = this.state.data[0].toLocaleString() + " paying users from "+this.state.data[1].toLocaleString()+" Companies"
         }
@@ -54,7 +78,6 @@ class Infocard extends React.Component {
             "bodyText":bt,
             data:this.props.data,
             isLoaded:true,
-            styles:this.props.stye
         })
     }
 //     componentDidUpdate(this.props){
@@ -68,43 +91,7 @@ class Infocard extends React.Component {
     
 
     render(){
-        const classes = this.props.styles;
-
-        // const tiers = [
-        //     {
-        //       title: 'Free',
-        //       price: '0',
-        //       description: ['10 users included', '2 GB of storage', 'Help center access', 'Email support'],
-        //       buttonText: 'Sign up for free',
-        //       buttonVariant: 'outlined',
-        //     },
-        //     {
-        //       title: 'Pro',
-        //       subheader: 'Most popular',
-        //       price: '15',
-        //       description: [
-        //         '20 users included',
-        //         '10 GB of storage',
-        //         'Help center access',
-        //         'Priority email support',
-        //       ],
-        //       buttonText: 'Get started',
-        //       buttonVariant: 'contained',
-        //     },
-        //     {
-        //       title: 'Enterprise',
-        //       price: '30',
-        //       description: [
-        //         '50 users included',
-        //         '30 GB of storage',
-        //         'Help center access',
-        //         'Phone & email support',
-        //       ],
-        //       buttonText: 'Contact us',
-        //       buttonVariant: 'outlined',
-        //     },
-        //   ];
-
+        const {classes} = this.props;
 
         return(
 
@@ -117,8 +104,8 @@ class Infocard extends React.Component {
                   className={classes.cardHeader}
                   />
                 <CardContent>
-                  <div className={classes.cardPricing}>
-                    <Typography component="h2" variant="h3" color="textPrimary">
+                  <div className={classes.cardBody}>
+                    <Typography component="h3" variant="h4" color="textPrimary">
                       {this.state.bodyText}
                     </Typography>
                   </div>
@@ -161,4 +148,11 @@ class Infocard extends React.Component {
     }
     }
     
-export default Infocard
+// export default Infocard
+
+Infocard.propTypes = {
+    classes: PropTypes.object.isRequired,
+  };
+  
+  export default withStyles(styles)(Infocard);
+  
