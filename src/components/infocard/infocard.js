@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { TheatersRounded } from '@material-ui/icons';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 
 
@@ -41,84 +42,56 @@ export default function Infocard(props){
 
     const [data, setData] = React.useState([0,0]);
     const [cardType, setCardType] = React.useState(props.cardType);
-    const [headerText, setHeaderText] = React.useState("Loading");
-    const [bodyText, setBodyText] = React.useState("Loading");
+    const [headerText, setHeaderText] = React.useState("");
+    const [bodyText, setBodyText] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(true);
 
 
 
 
-
-    // useEffect(() => {
-    //   var ht = "Something went wrong"
-    //     var bt = "Body not loaded yet"
-    //     if (cardType === 'paid'){
-    //         ht = "Total Dollars Paid"
-    //         bt = "$"+ data[0].toLocaleString()
-    //     }else if(cardType === 'payments'){
-    //         ht = "Total # of Payments"
-    //         bt = data[0].toLocaleString()
-    //     }else if(cardType === 'breakdown'){
-    //         ht = "Payment Breakdown"
-    //         bt = data[0].toLocaleString() + " paying users from "+data[1].toLocaleString()+" Companies"
-    //     }
-
-
-    //     setHeaderText(ht)
-    //     setBodyText(bt)
-    //     setData(props.data)
-  
-    //   }
-    // ,[])
-
     //update data when the props update
     useEffect(() => {
         setData(props.data)
-        updateText()
       }
     ,[props.data])
 
     //update text when the data updates
     useEffect(() => {
       updateText()
+      setIsLoading(false)
     }
   ,[data])
 
 
       const updateText = () => {
 
-        
-        var ht = "Something went wrong"
-        var bt = "Body not loaded yet"
-        try{
-          if (cardType === 'paid'){
-              ht = "Total Dollars Paid"
-              bt = "$"+ data[0].toLocaleString()
-          }else if(cardType === 'payments'){
-              ht = "Total # of Payments"
-              bt = data[0].toLocaleString()
-          }else if(cardType === 'breakdown'){
-              ht = "Payment Breakdown"
-              bt = data[0].toLocaleString() + " paying users from "+data[1].toLocaleString()+" Companies"
+        if(!isLoading){
+          var ht = "Something went wrong"
+          var bt = "Something went wrong"
+          try{
+            if (cardType === 'paid'){
+                ht = "Total Dollars Paid"
+                bt = "$"+ data[0].toLocaleString()
+            }else if(cardType === 'payments'){
+                ht = "Total # of Payments"
+                bt = data[0].toLocaleString()
+            }else if(cardType === 'breakdown'){
+                ht = "Payment Breakdown"
+                bt = data[0].toLocaleString() + " paying users from "+data[1].toLocaleString()+" Companies"
+            }
+            setHeaderText(ht)
+            setBodyText(bt)
+          }catch(error){
+            console.error(error)
+            console.log("Errored out in Newcard")
           }
-          setHeaderText(ht)
-          setBodyText(bt)
-          setIsLoading(false)
-        }catch(error){
-          console.error(error)
-          console.log("Errored out in Newcard")
         }
-
-
-
+        
       }
    
 
     const classes = useStyles();
 
-        if (isLoading) {
-          return (<CircularProgress />);
-        }
         return(
           
             <Grid item key={headerText} xs={12} sm={8} md={4}>
@@ -131,16 +104,9 @@ export default function Infocard(props){
                   />
                 <CardContent>
                   <div className={classes.cardBody}>
-                    
-                    {/* {isLoading?
-                    
-                      (<CircularProgress />):(
-                    
-                     */}
-                    <Typography component="h3" variant="h4" color="textPrimary">
-                      {bodyText}
-                    </Typography>
-                    {/* )} */}
+                     {isLoading?(<Skeleton variant="text" />):(
+                       <Typography component="h3" variant="h4" color="textPrimary">{bodyText}</Typography>
+                     )}
                   </div>
                 </CardContent>
               </Card>

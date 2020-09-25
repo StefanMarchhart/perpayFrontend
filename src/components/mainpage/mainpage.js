@@ -10,11 +10,10 @@ import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import BreakdownTable from "../breakdowntable/breakdowntable"
 import {Alert, AlertTitle} from '@material-ui/lab';
-
 // import { withStyles } from '@material-ui/core/styles';
 // import PropTypes from 'prop-types';
 // import { makeStyles } from '@material-ui/core/styles';
-
+import SimpleModal from "../login/modalmanger"
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -110,8 +109,8 @@ const useStyles = makeStyles((theme) => ({
                 <Container maxwidth="false" className={classes.heroContent}>
                 {/* <Container maxWidth="sm" component="main" > */}
                   <Typography component="h1" variant="h2" align="center" color="textPrimary">
-                    Perpay Payment Metrics
-                  </Typography>
+                    Perpay Payment Metrics 
+                  </Typography><SimpleModal isLogin={true}></SimpleModal>
                 </Container>
                 {/* End hero unit */}
                 {isLoading ?(
