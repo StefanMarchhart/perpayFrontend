@@ -1,89 +1,152 @@
-import React from 'react'
-import { Card, Icon, Image, Loader } from 'semantic-ui-react'
-import '../infocard/infocard.css'
-class Infocard extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state=  {
-            data: props.data||[0,0], 
-            cardType: props.cardType,
-            headerText:"Not Yet Loaded",
-            bodyText:"Not Yet Loaded",
-            isLoaded:props.isLoaded
-            
-        }
+import React, {useState, useEffect} from 'react'
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { TheatersRounded } from '@material-ui/icons';
 
-        // var ht = "Something went wrong"
 
-        // if (this.props.cardType=='paid'){
-        //     ht = "Total Dollars Paid"
-        // }else if(this.props.cardType=='payments'){
-        //     ht = "Total # of Payments"
-        // }else if(this.props.cardType=='breakdown'){
-        //     ht = "Payment Breakdown"
-        // }
 
-        // this.state={
-        //     "headerText":ht
-        // }
+const useStyles = makeStyles((theme) => ({
+  '@global': {
+      ul: {
+        margin: 0,
+        padding: 0,
+        listStyle: 'none',
+      },
+    },
+    cardHeader: {
+      backgroundColor:
+        theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
+    },
+    cardBody: {
+      display: 'flex',
+      justifyContent: 'center',
+      textAlign: "center",
+      alignItems: 'baseline',
+    //   marginBottom: theme.spacing(3),
+    },
+    MuiCardRoot:{
+      height: "100%"
+    },
+  }));
+
+
+// import '../infocard/infocard.css'
+export default function Infocard(props){
+
+
+    const [data, setData] = React.useState([0,0]);
+    const [cardType, setCardType] = React.useState(props.cardType);
+    const [headerText, setHeaderText] = React.useState("Loading");
+    const [bodyText, setBodyText] = React.useState("Loading");
+    const [isLoading, setIsLoading] = React.useState(true);
+
+
+
+
+
+    // useEffect(() => {
+    //   var ht = "Something went wrong"
+    //     var bt = "Body not loaded yet"
+    //     if (cardType === 'paid'){
+    //         ht = "Total Dollars Paid"
+    //         bt = "$"+ data[0].toLocaleString()
+    //     }else if(cardType === 'payments'){
+    //         ht = "Total # of Payments"
+    //         bt = data[0].toLocaleString()
+    //     }else if(cardType === 'breakdown'){
+    //         ht = "Payment Breakdown"
+    //         bt = data[0].toLocaleString() + " paying users from "+data[1].toLocaleString()+" Companies"
+    //     }
+
+
+    //     setHeaderText(ht)
+    //     setBodyText(bt)
+    //     setData(props.data)
+  
+    //   }
+    // ,[])
+
+    //update data when the props update
+    useEffect(() => {
+        setData(props.data)
+        updateText()
+      }
+    ,[props.data])
+
+    //update text when the data updates
+    useEffect(() => {
+      updateText()
     }
+  ,[data])
 
 
-    componentDidMount(){
+      const updateText = () => {
+
+        
         var ht = "Something went wrong"
         var bt = "Body not loaded yet"
-        if (this.state.cardType=='paid'){
-            ht = "Total Dollars Paid"
-            bt = "$"+ this.state.data[0].toLocaleString()
-        }else if(this.state.cardType=='payments'){
-            ht = "Total # of Payments"
-            bt = this.state.data[0].toLocaleString()
-        }else if(this.state.cardType=='breakdown'){
-            ht = "Payment Breakdown"
-            bt = this.state.data[0].toLocaleString() + " paying users from "+this.state.data[1].toLocaleString()+" Companies"
+        try{
+          if (cardType === 'paid'){
+              ht = "Total Dollars Paid"
+              bt = "$"+ data[0].toLocaleString()
+          }else if(cardType === 'payments'){
+              ht = "Total # of Payments"
+              bt = data[0].toLocaleString()
+          }else if(cardType === 'breakdown'){
+              ht = "Payment Breakdown"
+              bt = data[0].toLocaleString() + " paying users from "+data[1].toLocaleString()+" Companies"
+          }
+          setHeaderText(ht)
+          setBodyText(bt)
+          setIsLoading(false)
+        }catch(error){
+          console.error(error)
+          console.log("Errored out in Newcard")
         }
 
-        this.setState ({
-            "headerText":ht,
-            "bodyText":bt,
-            data:this.props.data,
-            isLoaded:true
-        })
-    }
-//     componentDidUpdate(this.props){
-//   // Typical usage (don't forget to compare props):
-//         if (this.props.isLoaded !== prevProps.isLoaded) {
-//             this.setState({isLoaded:true})
-//         }
-//     }
-    
-    
-    
 
-    render(){
 
+      }
+   
+
+    const classes = useStyles();
+
+        if (isLoading) {
+          return (<CircularProgress />);
+        }
         return(
-        <Card>
-            <Card.Content className="cardHeader">
-                {/* <Card.Header className="cardHeader">{this.state.headerText}</Card.Header> */}
-                <Card.Header size="huge" textAlign="left">{this.state.headerText}</Card.Header>
-            </Card.Content>
-        <Card.Content >
-            
-            <Card.Description>
-                {/* {this.state.isLoaded?(
-                this.state.bodyText
-                ):(
-                    <div class="ui active inline text loader">Loading</div>
-                )} */}
-            {this.state.bodyText}
-            {/* <div class="ui active inline text loader">Loading</div> */}
-            </Card.Description>
-        </Card.Content>
+          
+            <Grid item key={headerText} xs={12} sm={8} md={4}>
+              
+              <Card className={classes.MuiCardRoot}>
+                <CardHeader
+                  title={headerText}
+                  titleTypographyProps={{ align: 'left' }}
+                  className={classes.cardHeader}
+                  />
+                <CardContent>
+                  <div className={classes.cardBody}>
+                    
+                    {/* {isLoading?
+                    
+                      (<CircularProgress />):(
+                    
+                     */}
+                    <Typography component="h3" variant="h4" color="textPrimary">
+                      {bodyText}
+                    </Typography>
+                    {/* )} */}
+                  </div>
+                </CardContent>
+              </Card>
 
-    </Card>
-    )
-    }
+            </Grid>
+      )
+    
     }
     
-export default Infocard

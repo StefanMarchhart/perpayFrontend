@@ -1,5 +1,5 @@
 // import React from 'react';
-import Infocard from '../infocard/newcard';
+import Infocard from '../infocard/infocard';
 import React, {useState, useEffect} from 'react'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
@@ -59,70 +59,11 @@ const useStyles = makeStyles((theme) => ({
       })
 
 
-
-
-        // useEffect(() => {
-        //   fetch(createUrl(url, options.query), {
-        //     method: options.method || "GET",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: options.method !== "GET" && JSON.stringify(options.body),
-        //   })
-        //     .then(async (response) => {
-        //       const data = await response.json();
-        //       setData({
-        //         response: data,
-        //         error: !response.ok,
-        //         loading: false,
-        //       });
-        //     })
-        //     .catch((error) => {
-        //       //fetch throws an error only on network failure or if anything prevented the request from completing
-        //       setData({
-        //         response: { status: "network_failure" },
-        //         error: true,
-        //         loading: false,
-        //       });
-        //     });
-        // }, [url, JSON.stringify(options)]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      const fetchStatusHandler=((response) => {
-        if (response.status === 200) {
-          return response;
-        } else {
-          throw new Error(response.statusText);
-        }
-      })
       
-
-
-
-
-
-
-      // fetch("http://127.0.0.1:8000/totals?format=json")
-      // fetch(process.env.REACT_APP_DATABASE_URL)
-
-
-        useEffect(() => {
-          fetch("http://127.0.0.1:8000/testtotals?format=json")
+      useEffect(() => {
+        fetch("http://127.0.0.1:8000/testtotals?format=json")
+        // fetch("http://127.0.0.1:8000/totals?format=json")
+        // fetch(process.env.REACT_APP_DATABASE_URL)
               .then((res) => {
                 if (res.ok) {
                   return res.json();
@@ -163,11 +104,7 @@ const useStyles = makeStyles((theme) => ({
               <AlertTitle>Something went horribly wrong</AlertTitle>
               {totalError.message}
             </Alert>
-           
-          // <Alert variant="outlined" severity="error">Something went horribly wrong {totalError.message}</Alert>
           ):(
-          // (<div>something went horribly wrong{totalError}</div>):(
-              
               <Grid container className={classes.masterGrid} direction="column" justify="space-around" alignItems="center" maxidth="lg" component="main">
                 {/* Hero unit */}
                 <Container maxwidth="false" className={classes.heroContent}>
