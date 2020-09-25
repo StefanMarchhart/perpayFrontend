@@ -8,7 +8,7 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
-import BasicTable from "../breakdowntable/breakdowntable"
+import BreakdownTable from "../breakdowntable/breakdowntable"
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
@@ -23,18 +23,21 @@ const styles = theme => ({
       },
     },
     heroContent: {
-      padding: theme.spacing(8, 0, 6),
+      // padding: theme.spacing(8, 0, 6),
+      padding: theme.spacing(4,0),
     },
-    footer: {
-      borderTop: `1px solid ${theme.palette.divider}`,
-      marginTop: theme.spacing(8),
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3),
-      [theme.breakpoints.up('sm')]: {
-        paddingTop: theme.spacing(6),
-        paddingBottom: theme.spacing(6),
+    typography:{
+      [theme.breakpoints.down('sm')]: {
+        textAlign: "center",
       },
+      [theme.breakpoints.up('md')]: {
+        textAlign: "left",
+      } 
     },
+    // masterGrid:{
+    //   height: "100%",
+    //   flexWrap: "nowrap"
+    // },
   });
 
 
@@ -49,7 +52,8 @@ class Mainpage extends React.Component {
               };
         }
         componentDidMount() {
-            fetch("http://127.0.0.1:8000/totals?format=json")
+          fetch("http://127.0.0.1:8000/testtotals?format=json")
+            // fetch("http://127.0.0.1:8000/totals?format=json")
             // fetch(process.env.REACT_APP_DATABASE_URL)
               .then(res => res.json())
               .then(
@@ -70,7 +74,9 @@ class Mainpage extends React.Component {
                   });
                 }
               )
+
           }
+          
 
 
 
@@ -94,26 +100,29 @@ class Mainpage extends React.Component {
 
         <React.Fragment>
               <CssBaseline />
-              <Grid container  direction="column" justify="space-around" alignItems="center" maxWidth="lg" component="main">
-              {/* Hero unit */}
-              <Container maxWidth="false" className={classes.heroContent}>
-              {/* <Container maxWidth="sm" component="main" > */}
-                <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                  Perpay Payment Metrics
-                </Typography>
-              </Container>
-              {/* End hero unit */}
-              <Container maxWidth="false">
-                {/* <Grid container spacing={5} alignItems="flex-end"> */}
-                <Grid container spacing={5} alignItems="stretch">
-                    <Infocard isloaded={this.state.isLoaded} cardType="paid" data={[profit]} styles={classes} ></Infocard>
-                    <Infocard isloaded={this.state.isLoaded} cardType="payments" data={[payments]} styles={classes}></Infocard>
-                    <Infocard isloaded={this.state.isLoaded} cardType="breakdown" data={[users,companies]} styles={classes}></Infocard>
-                </Grid>
-              </Container>
-              <Container maxWidth="false">
-                <BasicTable></BasicTable>
-              </Container>
+              <Grid container className={classes.masterGrid} direction="column" justify="space-around" alignItems="center" maxWidth="lg" component="main">
+                {/* Hero unit */}
+                <Container maxWidth="false" className={classes.heroContent}>
+                {/* <Container maxWidth="sm" component="main" > */}
+                  <Typography component="h1" variant="h2" align="center" color="textPrimary">
+                    Perpay Payment Metrics
+                  </Typography>
+                </Container>
+                {/* End hero unit */}
+                <Container maxWidth="false">
+                  {/* <Grid container spacing={5} alignItems="flex-end"> */}
+                  <Grid container spacing={5} direction="row" justify="space-around" alignItems="stretch">
+                      <Infocard isloaded={this.state.isLoaded} cardType="paid" data={[profit]}></Infocard>
+                      <Infocard isloaded={this.state.isLoaded} cardType="payments" data={[payments]}></Infocard>
+                      <Infocard isloaded={this.state.isLoaded} cardType="breakdown" data={[users,companies]} ></Infocard>
+                  </Grid>
+                </Container>
+                <Container maxWidth="false">
+                <Typography className={classes.typography} component="h4" variant="h4"  color="blue" gutterBottom>
+                    Company Breakdown
+                  </Typography>
+                  <BreakdownTable></BreakdownTable>
+                </Container>
 
 
               </Grid>

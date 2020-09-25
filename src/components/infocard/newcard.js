@@ -25,9 +25,13 @@ const styles = theme => ({
     cardBody: {
       display: 'flex',
       justifyContent: 'center',
+      textAlign: "center",
       alignItems: 'baseline',
     //   marginBottom: theme.spacing(3),
-    }
+    },
+    MuiCardRoot:{
+      height: "100%"
+    },
   });
 
 
@@ -95,9 +99,9 @@ class Infocard extends React.Component {
 
         return(
 
-            <Grid item key={this.state.headerText} xs={12} sm={6} md={4}>
+            <Grid item key={this.state.headerText} xs={12} sm={8} md={4}>
               
-            <Card>
+            <Card className={classes.MuiCardRoot}>
                 <CardHeader
                   title={this.state.headerText}
                   titleTypographyProps={{ align: 'left' }}

@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/app/App';
+// import App from './components/app/App';
 import * as serviceWorker from './serviceWorker';
+import Mainpage from './components/mainpage/mainpage'
+import SignIn from "./components/login/login"
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
+  {/* <SignIn></SignIn> */}
+  <Mainpage></Mainpage>
   </React.StrictMode>,
   document.getElementById('root')
 );
