@@ -10,7 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     {/* <App /> */}
   {/* <SignIn></SignIn> */}
-  <Mainpage></Mainpage>
+    <Mainpage></Mainpage>
   </React.StrictMode>,
   document.getElementById('root')
 );
