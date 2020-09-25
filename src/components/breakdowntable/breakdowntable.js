@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function BreakdownTable(){
+export default function BreakdownTable(props){
 
 
   const [page, setPage] = React.useState(0);
@@ -37,14 +37,16 @@ export default function BreakdownTable(){
   const [breakdownError, setBreakdownError] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [rows, setRows] = useState([])
+  const [userToken,setUserToken]=useState(props.userToken)
 
 
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/testbreakdown?format=json")
-    // fetch("http://127.0.0.1:8000/breakdown?format=json")
-    // fetch(process.env.REACT_APP_DATABASE_URL)
-    .then((res) => {
+    fetch("http://127.0.0.1:8000/testbreakdown?format=json",{
+      headers: {
+        'Authorization': 'Token '+userToken
+      },
+    }).then((res) => {
       if (res.ok) {
         return res.json();
       } else {

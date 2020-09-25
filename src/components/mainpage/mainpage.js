@@ -35,21 +35,28 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "left",
       } 
     },
-    // masterGrid:{
-    //   height: "100%",
-    //   flexWrap: "nowrap"
-    // },
   }));
 
 
   export default function Mainpage() {
-  const classes = useStyles();
+    const classes = useStyles();
+
+      const fetchStoredToken=(()=>{
+        return window.sessionStorage.getItem("userToken") || window.localStorage.getItem("userToken") || null
+      })
+
+
+      // useEffect(()=>{
+      //   fetchStoredToken()
+      // },[window.sessionStorage.getItem("userToken"),window.localStorage.getItem("userToken")])
 
 
         const [totalError, setTotalError] = useState("")
         const [isLoading, setIsLoading] = useState(false)
         // const [totals, setTotals] = useState({})
-
+        // cons [isSignedIn, setIsSignedIn] = useState()
+        const [userToken, setUserToken] = useState(fetchStoredToken())
+        const [update, setUpdate] = useState(false) 
         const [totals, setTotals] = useState({
           "totalPaid": "",
           "totalPayments": "",
@@ -58,15 +65,25 @@ const useStyles = makeStyles((theme) => ({
       })
 
 
+
       
       useEffect(() => {
-        fetch("http://127.0.0.1:8000/testtotals?format=json")
+
+        
+        fetch("http://127.0.0.1:8000/testtotals?format=json",{
+          headers: {
+            'Authorization': 'Token '+ userToken
+          },
+      
+        })
         // fetch("http://127.0.0.1:8000/totals?format=json")
         // fetch(process.env.REACT_APP_DATABASE_URL)
               .then((res) => {
                 if (res.ok) {
                   return res.json();
-                } else {
+                } else if(res.status==401){
+                  console.log("Not Signed In")
+                }else{
                   throw new Error(res.status+" - "+res.statusText);
                 }
               }).then(
@@ -90,27 +107,48 @@ const useStyles = makeStyles((theme) => ({
           setIsLoading(false)
 
         },[totals])
+
           
         return (
 
           <React.Fragment>
               <CssBaseline />
 
+          {/* {!userToken&&<SimpleModal openByDefault={true}></SimpleModal>} */}
 
-          {totalError?
-          (
-            <Alert severity="error">
+          {!userToken?(
+            // if there isn't a user signed in, show sign-in
+            <SimpleModal openByDefault={true}></SimpleModal>
+          ):(
+            totalError?(
+              // if there's an error, show error
+              <Alert severity="error">
               <AlertTitle>Something went horribly wrong</AlertTitle>
               {totalError.message}
             </Alert>
-          ):(
+            ):(
+              // normal flow
+          //   )
+          // )}
+
+          // {totalError?
+          // (
+            
+          //   <Alert severity="error">
+          //     <AlertTitle>Something went horribly wrong</AlertTitle>
+          //     {totalError.message}
+          //   </Alert>
+            
+
+          // ):(
               <Grid container className={classes.masterGrid} direction="column" justify="space-around" alignItems="center" maxidth="lg" component="main">
                 {/* Hero unit */}
                 <Container maxwidth="false" className={classes.heroContent}>
                 {/* <Container maxWidth="sm" component="main" > */}
                   <Typography component="h1" variant="h2" align="center" color="textPrimary">
                     Perpay Payment Metrics 
-                  </Typography><SimpleModal isLogin={true}></SimpleModal>
+                  </Typography>
+                  {/* <SimpleModal openByDefault={false}></SimpleModal> */}
                 </Container>
                 {/* End hero unit */}
                 {isLoading ?(
@@ -131,12 +169,12 @@ const useStyles = makeStyles((theme) => ({
                 <Typography className={classes.typography} component="h4" variant="h4" gutterBottom>
                     Company Breakdown
                   </Typography>
-                  <BreakdownTable></BreakdownTable>
+                  <BreakdownTable userToken={userToken}></BreakdownTable>
                 </Container>
 
 
               </Grid>
-            )}
+            ))}
             </React.Fragment>
             );
         }

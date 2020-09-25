@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,17 +15,24 @@ import Container from '@material-ui/core/Container';
 import { useEventCallback } from '@material-ui/core';
 
 
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    // backgroundColor: theme.palette.background.paper,
+    // border: '2px solid #000',
+    // boxShadow: theme.shadows[5],
+    // padding: theme.spacing(2, 4, 3),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -38,12 +45,59 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  formControl: {
+    // margin: theme.spacing(1),
+    minWidth: 120,
+    width: '100%'
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 
 
 export default function SignUp(props) {
   const classes = useStyles();
+
+  const [company, setCompany] = React.useState('');
+  const [companyList, setCompanyList]= React.useState(["No Companies Found"])
+
+  const handleCompanyChange = (event) => {
+    setCompany(event.target.value);
+  };
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/companies?format=json")
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error(res.status+" - "+res.statusText);
+      }
+    }).then(
+      (result) => {
+
+        setCompanyList(result)
+
+      },
+      (e) => {
+        console.log(e)
+        console.log("error hit")
+      }
+    )}
+  ,[])
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -54,27 +108,15 @@ export default function SignUp(props) {
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
               />
             </Grid>
             <Grid item xs={12}>
@@ -100,6 +142,25 @@ export default function SignUp(props) {
                 autoComplete="current-password"
               />
             </Grid>
+            <Grid item xs={12}>
+            <FormControl variant="outlined" className={classes.formControl}>
+                <InputLabel id="demo-simple-select-outlined-label">Company *</InputLabel>
+                <Select
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={company}
+                onChange={handleCompanyChange}
+                label="Company"
+                >
+                {companyList.map((column) => {
+                    return (
+                    <MenuItem value={column}>{column}</MenuItem>
+                    );
+                  })}
+
+                </Select>
+            </FormControl>
+          </Grid>
           </Grid>
           <Button
             type="submit"
@@ -110,14 +171,6 @@ export default function SignUp(props) {
           >
             Sign Up
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
-          <Button onClick={()=>{props.toggle(true)}} variant="contained">Default</Button>
         </form>
       </div>
     </Container>
