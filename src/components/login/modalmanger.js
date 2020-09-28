@@ -10,17 +10,6 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 
 
-// const useStyles = makeStyles((theme) => ({
-//   paper: {
-//     position: 'absolute',
-//     width: 400,
-//     backgroundColor: theme.palette.background.paper,
-//     border: '2px solid #000',
-//     boxShadow: theme.shadows[5],
-//     padding: theme.spacing(2, 4, 3),
-//   },
-// }));
-
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -72,7 +61,7 @@ export default function SimpleModal(props) {
 
 
         <Modal
-        disableBackdropClick="true"
+        disableBackdropClick={true}
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           className={classes.modal}
@@ -83,6 +72,7 @@ export default function SimpleModal(props) {
           BackdropProps={{
             timeout: 500,
           }}
+          disableEscapeKeyDown
         >
           <Fade in={open}>
             <div className={classes.paper}>

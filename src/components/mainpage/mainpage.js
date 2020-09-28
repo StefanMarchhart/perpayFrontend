@@ -14,6 +14,8 @@ import {Alert, AlertTitle} from '@material-ui/lab';
 // import PropTypes from 'prop-types';
 // import { makeStyles } from '@material-ui/core/styles';
 import SimpleModal from "../login/modalmanger"
+import Fab from '@material-ui/core/Fab';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -35,11 +37,28 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "left",
       } 
     },
+    fab:{
+      margin: 0,
+      bottom: 'auto',
+      right: 20,
+      top: 20,
+      left: 'auto',
+      position: 'fixed',
+    }
   }));
 
 
   export default function Mainpage() {
     const classes = useStyles();
+
+
+
+      const signOut=(()=>{
+        window.sessionStorage.removeItem("userToken")
+        window.localStorage.removeItem("userToken")
+        window.location.reload(false);
+      })
+
 
       const fetchStoredToken=(()=>{
         return window.sessionStorage.getItem("userToken") || window.localStorage.getItem("userToken") || null
@@ -68,7 +87,9 @@ const useStyles = makeStyles((theme) => ({
 
       
       useEffect(() => {
-
+        if(!userToken){
+          return
+        }
         
         fetch("http://127.0.0.1:8000/testtotals?format=json",{
           headers: {
@@ -144,10 +165,16 @@ const useStyles = makeStyles((theme) => ({
               <Grid container className={classes.masterGrid} direction="column" justify="space-around" alignItems="center" maxidth="lg" component="main">
                 {/* Hero unit */}
                 <Container maxwidth="false" className={classes.heroContent}>
+                <Fab className={classes.fab} onClick={signOut} variant="extended">
+                  <MeetingRoomIcon className={classes.extendedIcon} />
+                  Sign Out
+                  </Fab>
                 {/* <Container maxWidth="sm" component="main" > */}
                   <Typography component="h1" variant="h2" align="center" color="textPrimary">
                     Perpay Payment Metrics 
                   </Typography>
+
+
                   {/* <SimpleModal openByDefault={false}></SimpleModal> */}
                 </Container>
                 {/* End hero unit */}
