@@ -13,6 +13,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 
 
 
@@ -44,6 +46,7 @@ export default function BreakdownTable(props) {
 
   useEffect(() => {
       if (props.isFaked) {
+          setIsLoading(false)
           setRows(new Array(10).fill({
               "company": "Generic Company",
               "paid": "$202,149",
@@ -51,7 +54,7 @@ export default function BreakdownTable(props) {
               "users": "3,867"
           }))
       } else {
-          fetch(process.env.REACT_APP_BACKEND_URL + process.env.REACT_APP_TEST_FLAG + "breakdown?format=json", {
+          fetch(process.env.REACT_APP_BACKEND_URL + "breakdown?format=json", {
               headers: {
                   'Authorization': 'Token ' + userToken
               },
@@ -64,6 +67,7 @@ export default function BreakdownTable(props) {
           }).then(
               (result) => {
                   setRows(result)
+                  setIsLoading(false)
               },
               (e) => {
                   setBreakdownError(e)
@@ -75,6 +79,40 @@ export default function BreakdownTable(props) {
       }
   }, [])
 
+
+  useEffect(() => {
+    if (props.isFaked) {
+        setRows(new Array(10).fill({
+            "company": "Generic Company",
+            "paid": "$202,149",
+            "payments": "500",
+            "users": "3,867"
+        }))
+    } else {
+        fetch(process.env.REACT_APP_BACKEND_URL + "breakdown?format=json", {
+            headers: {
+                'Authorization': 'Token ' + userToken
+            },
+        }).then((res) => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error(res.status + " - " + res.statusText);
+            }
+        }).then(
+            (result) => {
+                setRows(result)
+                setIsLoading(false)
+            },
+            (e) => {
+                setBreakdownError(e)
+                console.log(e)
+                console.log("error hit")
+                setIsLoading(false)
+            }
+        )
+    }
+}, [])
 
 
 
@@ -122,6 +160,9 @@ const columns = [{
   return (
     <Paper elevation={2} className={classes.root}>
       <TableContainer className={classes.container}>
+        {isLoading?(<LinearProgress />):(
+
+
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -155,6 +196,8 @@ const columns = [{
             })}
           </TableBody>
         </Table>
+                )}
+                
       </TableContainer>
       <TablePagination
         rowsPerPageOptions={[5,10]}

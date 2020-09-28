@@ -18,10 +18,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "heroku-build": "docker build -t registry.heroku.com/young-shelf-38848/web .",
-    "heroku-push": "docker push registry.heroku.com/young-shelf-38848/web",
-    "heroku-release": "heroku container:release -a young-shelf-38848 web",
-    "deploy": "npm run heroku-build && npm run heroku-push && heroku-release"
+    "heroku-build": "docker build -t registry.heroku.com/perpay-frontend/web .",
+    "heroku-push": "docker push registry.heroku.com/perpay-frontend/web",
+    "heroku-release": "heroku container:release -a perpay-frontend web",
+    "deploy": "npm run heroku-build && npm run heroku-push && npm run heroku-release"
   },
   "eslintConfig": {
     "extends": "react-app"

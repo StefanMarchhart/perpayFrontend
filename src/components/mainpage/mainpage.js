@@ -88,7 +88,6 @@ export default function Mainpage() {
     useEffect(() => {
         console.log("Printing env vars")
         console.log(process.env.REACT_APP_BACKEND_URL);
-        console.log(process.env.REACT_APP_TEST_FLAG);
 
         //   If we don't have a user, use fake data for background
         if (!userToken) {
@@ -101,7 +100,7 @@ export default function Mainpage() {
             return
         }
 
-        fetch(process.env.REACT_APP_BACKEND_URL + process.env.REACT_APP_TEST_FLAG + "totals?format=json", {
+        fetch(process.env.REACT_APP_BACKEND_URL + "totals?format=json", {
                 headers: {
                     'Authorization': 'Token ' + userToken
                 },

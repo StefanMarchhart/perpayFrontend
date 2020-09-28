@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import {
     makeStyles
 } from '@material-ui/core/styles';
-import Skeleton from '@material-ui/lab/Skeleton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 
@@ -47,6 +47,7 @@ export default function Infocard(props) {
     const [headerText, setHeaderText] = React.useState("");
     const [bodyText, setBodyText] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(true);
+    const [showLoading, setShowLoading] = React.useState(true);
 
 
     useEffect(() => {
@@ -54,6 +55,7 @@ export default function Infocard(props) {
             setHeaderText("Total Dollars Paid")
             setBodyText("$203,814 across 3,000")
             setIsLoading(false)
+            setShowLoading(false)
         }
     }, [])
 
@@ -64,16 +66,24 @@ export default function Infocard(props) {
 
     //update text when the data updates
     useEffect(() => {
-        updateText()
         setIsLoading(false)
+        updateText()
     }, [data])
+
+
+    useEffect(()=>{
+        if (bodyText!=="" && headerText!==""){
+            setShowLoading(false)
+        }
+    },[bodyText])
 
 
     const updateText = () => {
         if (props.isFaked){
+            setShowLoading(false)
             return
         }
-        if (!isLoading) {
+        if (data[0]) {
             var ht = "Something went wrong"
             var bt = "Something went wrong"
             try {
@@ -89,6 +99,8 @@ export default function Infocard(props) {
                 }
                 setHeaderText(ht)
                 setBodyText(bt)
+                // setShowLoading(false)
+
             } catch (error) {
                 console.error(error)
                 console.log("Errored out in Newcard")
@@ -112,7 +124,7 @@ export default function Infocard(props) {
                   />
                 <CardContent>
                   <div className={classes.cardBody}>
-                     {isLoading?(<Skeleton variant="text" />):(
+                     {showLoading?(<CircularProgress />):(
                        <Typography component="h3" variant="h4" color="textPrimary">{bodyText}</Typography>
                      )}
                   </div>
