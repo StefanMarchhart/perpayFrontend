@@ -1,94 +1,102 @@
-import React, {useState, useEffect} from 'react'
+import React, {
+    useState,
+    useEffect
+} from 'react'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { TheatersRounded } from '@material-ui/icons';
+import {
+    makeStyles
+} from '@material-ui/core/styles';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 
 
 const useStyles = makeStyles((theme) => ({
-  '@global': {
-      ul: {
-        margin: 0,
-        padding: 0,
-        listStyle: 'none',
-      },
+    '@global': {
+        ul: {
+            margin: 0,
+            padding: 0,
+            listStyle: 'none',
+        },
     },
     cardHeader: {
-      backgroundColor:
-        theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
+        backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
     },
     cardBody: {
-      display: 'flex',
-      justifyContent: 'center',
-      textAlign: "center",
-      alignItems: 'baseline',
-    //   marginBottom: theme.spacing(3),
+        display: 'flex',
+        justifyContent: 'center',
+        textAlign: "center",
+        alignItems: 'baseline',
+        //   marginBottom: theme.spacing(3),
     },
-    MuiCardRoot:{
-      height: "100%"
+    MuiCardRoot: {
+        height: "100%"
     },
-  }));
+}));
 
 
 // import '../infocard/infocard.css'
-export default function Infocard(props){
+export default function Infocard(props) {
 
 
-    const [data, setData] = React.useState([0,0]);
+    const [data, setData] = React.useState([0, 0]);
     const [cardType, setCardType] = React.useState(props.cardType);
     const [headerText, setHeaderText] = React.useState("");
     const [bodyText, setBodyText] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(true);
 
 
-
+    useEffect(() => {
+        if (props.faked){
+            setHeaderText("Total Dollars Paid")
+            setBodyText("$203,814 across 3,000")
+            setIsLoading(false)
+        }
+    }, [])
 
     //update data when the props update
     useEffect(() => {
         setData(props.data)
-      }
-    ,[props.data])
+    }, [props.data])
 
     //update text when the data updates
     useEffect(() => {
-      updateText()
-      setIsLoading(false)
-    }
-  ,[data])
+        updateText()
+        setIsLoading(false)
+    }, [data])
 
 
-      const updateText = () => {
-
-        if(!isLoading){
-          var ht = "Something went wrong"
-          var bt = "Something went wrong"
-          try{
-            if (cardType === 'paid'){
-                ht = "Total Dollars Paid"
-                bt = "$"+ data[0].toLocaleString()
-            }else if(cardType === 'payments'){
-                ht = "Total # of Payments"
-                bt = data[0].toLocaleString()
-            }else if(cardType === 'breakdown'){
-                ht = "Payment Breakdown"
-                bt = data[0].toLocaleString() + " paying users from "+data[1].toLocaleString()+" Companies"
-            }
-            setHeaderText(ht)
-            setBodyText(bt)
-          }catch(error){
-            console.error(error)
-            console.log("Errored out in Newcard")
-          }
+    const updateText = () => {
+        if (props.isFaked){
+            return
         }
-        
-      }
-   
+        if (!isLoading) {
+            var ht = "Something went wrong"
+            var bt = "Something went wrong"
+            try {
+                if (cardType === 'paid') {
+                    ht = "Total Dollars Paid"
+                    bt = "$" + data[0].toLocaleString()
+                } else if (cardType === 'payments') {
+                    ht = "Total # of Payments"
+                    bt = data[0].toLocaleString()
+                } else if (cardType === 'breakdown') {
+                    ht = "Payment Breakdown"
+                    bt = data[0].toLocaleString() + " paying users from " + data[1].toLocaleString() + " Companies"
+                }
+                setHeaderText(ht)
+                setBodyText(bt)
+            } catch (error) {
+                console.error(error)
+                console.log("Errored out in Newcard")
+            }
+        }
+
+    }
+
 
     const classes = useStyles();
 

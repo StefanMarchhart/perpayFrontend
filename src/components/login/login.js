@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
+import React, {
+  useState
+} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  makeStyles
+} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation = {
+    6
+  }
+  variant = "filled" {
+    ...props
+  }
+  />;
+}
 
 // [theme.breakpoints.down('xs')]: {
 //     width: 300,
@@ -26,111 +38,150 @@ import Container from '@material-ui/core/Container';
 
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-      marginTop: theme.spacing(4),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
+  paper: {
+    marginTop: theme.spacing(4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     //   backgroundColor: theme.palette.background.paper,
     //   border: '2px solid #000',
     //   boxShadow: theme.shadows[5],
     //   padding: theme.spacing(2, 4, 3),
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
     },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(3),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-  }));
+  },
+}));
 
 export default function Login(props) {
   const classes = useStyles();
 
 
-    const[usernameValue,setusernameValue]=useState("")
-    const[passwordValue,setpasswordValue]=useState("")
-    const[rememberMe,setRememberMe] = useState(false);
-    // const[requestedToken,setRequestedToken] = useState("");
-
-
-    const handleRememberMeChange = (event) => {
-        setRememberMe(event.target.checked);
-      };
-
-    const handleUsernameChange=((e)=>{
-        console.log(e)
-        setusernameValue(e.target.value)
-    })
-
-    const handlePasswordChange=((e)=>{
-        setpasswordValue(e.target.value)
-    })
+  const [usernameValue, setusernameValue] = useState("")
+  const [passwordValue, setpasswordValue] = useState("")
+  const [rememberMe, setRememberMe] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [errorBody, setErrorBody] = React.useState("false");
+  const [passwordError, setPasswordError] = React.useState(false);
 
 
 
-    const attemptLogin=(()=>{
+  const handleClose = (event, reason) => {
+
+    setOpen(false);
+    setErrorBody("")
+    // setPasswordError(false)
+  }
+
+  const postClose = (() => {
+    setPasswordError(false)
+  })
+
+  // const[requestedToken,setRequestedToken] = useState("");
 
 
-        var data={
-            "username":usernameValue,
-            "password":passwordValue,
+  const handleRememberMeChange = (event) => {
+    setRememberMe(event.target.checked);
+  };
+
+  const handleUsernameChange = ((e) => {
+    console.log(e)
+    setusernameValue(e.target.value)
+    handleClose()
+  })
+
+  const handlePasswordChange = ((e) => {
+    setpasswordValue(e.target.value)
+    handleClose()
+  })
+
+  const saveToken = ((token) => {
+    if (rememberMe) {
+      window.sessionStorage.setItem("userToken", token)
+
+    } else {
+      window.localStorage.setItem("userToken", token)
+    }
+    window.location.reload(false);
+
+  })
+
+  const attemptLogin = (() => {
+
+
+    var data = {
+      "username": usernameValue,
+      "password": passwordValue,
+    }
+    console.log(data)
+
+    fetch(process.env.REACT_APP_BACKEND_URL + "api-token-auth/", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+
+      })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else if (res.status === 400) {
+          throw res
+        } else {
+          throw new Error(res.status + " - " + res.statusText);
         }
-        console.log(data)
-    
-        fetch("http://127.0.0.1:8000/api-token-auth/",{
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(data),
-          
-            })
-            // fetch("http://127.0.0.1:8000/totals?format=json")
-            // fetch(process.env.REACT_APP_DATABASE_URL)
-                  .then((res) => {
-                    if (res.ok) {
-                      return res.json();
-                    } else {
-                      throw new Error(res.status+" - "+res.statusText);
-                    }
-                  }).then(
-                    (result) => {
-                        console.log(result)
-                        // setRequestedToken(result)
-                        saveToken(result["token"])
-                    },
-                    (e) => {
-                    //   setTotalError(e)
-                      console.log(e)
-                      console.log("error hit")
-                    //   setIsLoading(false)
-                    }
-                  )
-    
-              
-    })
+      }).then(
+        (result) => {
+          console.log(result)
+          // setRequestedToken(result)
+          saveToken(result["token"])
+        },
+        (e) => {
+          //   setTotalError(e)
+          console.log(e)
+
+          if (e instanceof TypeError) {
+            setPasswordError(false)
+            setErrorBody("Network Error: Cannot Connect to Server")
+            setOpen(true)
+          }
+
+          e.json().then((body) => {
 
 
+            if (body["non_field_errors"]) {
+              setErrorBody(body["non_field_errors"])
+              setPasswordError(true)
+              setOpen(true)
+            } else if (body["password"] || body["username"]) {
+              setErrorBody("Both fields are required")
+              setPasswordError(true)
+              setOpen(true)
+            } else {
+              console.log(e.body)
+            }
+          })
 
-
-    const saveToken=((token)=>{
-        if(rememberMe){
-            window.sessionStorage.setItem("userToken",token)
-
-        }else{
-            window.localStorage.setItem("userToken",token)
         }
-        window.location.reload(false);
-
-    })
+      )
 
 
+  })
 
 
 
@@ -147,6 +198,7 @@ export default function Login(props) {
         <form className={classes.form} noValidate>
           <TextField
             onChange={handleUsernameChange}
+            error={passwordError}
             variant="outlined"
             margin="normal"
             required
@@ -159,6 +211,7 @@ export default function Login(props) {
           />
           <TextField
             onChange={handlePasswordChange}
+            error={passwordError}
             variant="outlined"
             margin="normal"
             required
@@ -182,7 +235,12 @@ export default function Login(props) {
             className={classes.submit}
           >
             Sign In
-          </Button>       
+          </Button>    
+        <Snackbar onExited={postClose} anchorOrigin={passwordError?{vertical:'bottom',horizontal:'center'}:{vertical:'top',horizontal:'center'}}open={open} autoHideDuration={passwordError?6000:null} onClose={handleClose}>
+          <Alert onClose={handleClose} severity={passwordError?"error":"info"}>
+            {errorBody}
+          </Alert>
+        </Snackbar>   
         </form>
       </div>
     </Container>

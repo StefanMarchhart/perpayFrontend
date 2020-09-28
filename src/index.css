@@ -16,3 +16,11 @@ code {
   height: 100%;
 } */
 
+#maingrid {
+
+ filter: blur(7px);
+
+ /* filter: url("blur.svg#gaussian_blur"); */
+
+ -webkit-filter: blur(7px);
+}

@@ -5,10 +5,9 @@ import Login from "./login"
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import SignUp from './signup';
-import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-
+// import './modalmanager.css';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
-      },
+      }
     }));
 
 
@@ -75,7 +74,7 @@ export default function SimpleModal(props) {
           disableEscapeKeyDown
         >
           <Fade in={open}>
-            <div className={classes.paper}>
+            <div id="modalManager" className={classes.paper}>
               {/* <h2 id="transition-modal-title">Transition modal</h2> */}
               {/* <p id="transition-modal-description">react-transition-group animates me.</p> */}
                 {/* {isLogin?(<div>Login</div>):(<div>Signup</div>)} */}
