@@ -142,7 +142,7 @@ export default function Mainpage() {
 
         {!userToken?(
         // if there isn't a user signed in, show sign-in
-        <Grid id="maingrid" container style={{filter: blur("7px")}} className={classes.masterGrid} direction="column" justify="space-around" alignItems="center" maxidth="lg" component="main">
+        <Grid id="maingrid" container style={{filter: "blur(7px)"}} className={classes.masterGrid} direction="column" justify="space-around" alignItems="center" maxidth="lg" component="main">
             <Container maxwidth="false" className={classes.heroContent}>
                 <Typography component="h1" variant="h2" align="center" color="textPrimary">
                 Perpay Payment Metrics

@@ -5,7 +5,6 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Mainpage from './components/mainpage/mainpage'
 import SignIn from "./components/login/login"
-import '../public/favicon.ico';
 ReactDOM.render(
   <React.StrictMode>
     {/* <App /> */}
