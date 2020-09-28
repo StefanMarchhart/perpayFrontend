@@ -86,7 +86,9 @@ export default function Mainpage() {
 
 
     useEffect(() => {
+        console.log("Printing env vars")
         console.log(process.env.REACT_APP_BACKEND_URL);
+        console.log(process.env.REACT_APP_TEST_FLAG);
 
         //   If we don't have a user, use fake data for background
         if (!userToken) {
