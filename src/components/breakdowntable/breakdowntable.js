@@ -14,7 +14,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
+import fallbackUrl from '../mainpage/mainpage'
 
 
 
@@ -54,7 +54,7 @@ export default function BreakdownTable(props) {
               "users": "3,867"
           }))
       } else {
-          fetch(process.env.REACT_APP_BACKEND_URL + "breakdown?format=json", {
+          fetch((process.env.REACT_APP_BACKEND_URL||fallbackUrl) + "breakdown?format=json", {
               headers: {
                   'Authorization': 'Token ' + userToken
               },
@@ -89,7 +89,7 @@ export default function BreakdownTable(props) {
             "users": "3,867"
         }))
     } else {
-        fetch(process.env.REACT_APP_BACKEND_URL + "breakdown?format=json", {
+        fetch((process.env.REACT_APP_BACKEND_URL||fallbackUrl) + "breakdown?format=json", {
             headers: {
                 'Authorization': 'Token ' + userToken
             },

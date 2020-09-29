@@ -13,6 +13,7 @@ import {
 import Container from '@material-ui/core/Container';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import fallbackUrl from '../mainpage/mainpage'
 
 function Alert(props) {
   return <MuiAlert elevation = {
@@ -99,7 +100,6 @@ export default function Login(props) {
   };
 
   const handleUsernameChange = ((e) => {
-    console.log(e)
     setusernameValue(e.target.value)
     handleClose()
   })
@@ -129,7 +129,7 @@ export default function Login(props) {
     }
     console.log(data)
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "api-token-auth/", {
+    fetch((process.env.REACT_APP_BACKEND_URL||fallbackUrl) + "api-token-auth/", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

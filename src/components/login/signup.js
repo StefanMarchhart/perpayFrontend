@@ -17,6 +17,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import fallbackUrl from '../mainpage/mainpage'
 
 
 
@@ -83,7 +84,7 @@ export default function SignUp(props) {
   // const[validationErrors,setValidationErrors]=useState([])
 
   useEffect(() => {
-        fetch(process.env.REACT_APP_BACKEND_URL + "companies?format=json")
+        fetch((process.env.REACT_APP_BACKEND_URL||fallbackUrl) + "companies?format=json")
           .then((res) => {
             if (res.ok) {
               return res.json();
@@ -221,7 +222,7 @@ export default function SignUp(props) {
         // }
         console.log(data)
 
-        fetch(process.env.REACT_APP_BACKEND_URL + "signup/", {
+        fetch((process.env.REACT_APP_BACKEND_URL||fallbackUrl) + "signup/", {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

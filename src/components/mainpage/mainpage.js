@@ -20,6 +20,9 @@ import Fab from '@material-ui/core/Fab';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 
 
+export const fallbackUrl="https://perpay-backend.herokuapp.com/"
+
+
 const useStyles = makeStyles((theme) => ({
     '@global': {
         ul: {
@@ -100,7 +103,7 @@ export default function Mainpage() {
             return
         }
 
-        fetch(process.env.REACT_APP_BACKEND_URL + "totals?format=json", {
+        fetch((process.env.REACT_APP_BACKEND_URL||fallbackUrl) + "totals?format=json", {
                 headers: {
                     'Authorization': 'Token ' + userToken
                 },
